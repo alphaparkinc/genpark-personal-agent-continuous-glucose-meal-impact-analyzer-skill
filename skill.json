@@ -1,0 +1,83 @@
+{
+  "name": "genpark-personal-agent-continuous-glucose-meal-impact-analyzer-skill",
+  "title": "Continuous Glucose & Meal Impact Analyzer Skill",
+  "version": "1.0.0",
+  "description": "Continuous glucose monitoring (CGM) telemetry ingestion, meal glycemic impact correlation, spike area-under-curve (AUC) calculation, and dietary response optimization for personal health agents. Built for GenPark (https://www.genpark.ai).",
+  "homepage": "https://www.genpark.ai",
+  "organization": {
+    "name": "GenPark Inc.",
+    "url": "https://www.genpark.ai",
+    "linkedin": "https://www.linkedin.com/company/92955550"
+  },
+  "mcp_version": "2024-11-05",
+  "category": "personal-agent",
+  "tools": [
+    {
+      "name": "analyze_cgm_meal_impact",
+      "description": "Correlate postprandial CGM telemetry with food logs to compute glycemic excursion peak, spike duration, and incremental AUC.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "baseline_glucose_mg_dl": {
+            "type": "number",
+            "description": "Fasting/pre-meal baseline glucose level (e.g. 95.0)"
+          },
+          "meal_macronutrients": {
+            "type": "object",
+            "properties": {
+              "net_carbs_g": {
+                "type": "number"
+              },
+              "protein_g": {
+                "type": "number"
+              },
+              "fat_g": {
+                "type": "number"
+              },
+              "fiber_g": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "net_carbs_g"
+            ]
+          },
+          "cgm_readings_mg_dl": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Glucose readings at 15-minute intervals post-meal (e.g. [98, 115, 142, 138, 120, 105, 96])"
+          }
+        },
+        "required": [
+          "baseline_glucose_mg_dl",
+          "meal_macronutrients",
+          "cgm_readings_mg_dl"
+        ]
+      }
+    },
+    {
+      "name": "recommend_glycemic_mitigations",
+      "description": "Generate actionable behavioral interventions (post-meal walking, food sequencing, vinegar/fiber preloads) to dampen glycemic volatility.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "peak_glucose_mg_dl": {
+            "type": "number"
+          },
+          "spike_delta_mg_dl": {
+            "type": "number"
+          },
+          "auc_score": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "peak_glucose_mg_dl",
+          "spike_delta_mg_dl"
+        ]
+      }
+    }
+  ]
+}
